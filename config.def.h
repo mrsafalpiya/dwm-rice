@@ -46,6 +46,17 @@ static const Rule rules[] = {
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           0,          -1,        -1 },
 	{ "st",       NULL,       NULL,       0,            0,           0,           1,           0,        -1 },
 	{ NULL,       NULL,       "Event Tester",0,         0,           0,           0,           1,        -1 }, /* xev */
+
+	/* class     instance  title           tags mask  iscentered   isfloating  isterminal  noswallow  monitor  key */
+	{ "st",      NULL,     NULL,           0,         0,           0,          1,           0,        -1,      0},
+	{ "Brave-browser",NULL,NULL,           1 << 1,    0,           0,          0,          -1,        -1,      0},
+	{ "ncmpcppterm",NULL,  NULL,           1 << 8,    0,           0,          0,          -1,        -1,      0},
+	{ "newsboatterm",NULL, NULL,           1 << 7,    0,           0,          0,          -1,        -1,      0},
+	{ NULL,      NULL,     "Event Tester", 0,         0,           0,          0,          1,          -1,     0}, /* xev */
+	{ "scratchpad",NULL,   NULL,           0,         1,           1,          1,          0,          -1,     's' },
+	{ "pulsemixercmd",NULL,NULL,           0,         1,           1,          1,          0,          -1,     'p' },
+	{ "gotopcmd", NULL,    NULL,           0,         1,           1,          1,          0,          -1,     'g' },
+	{ "bccmd",    NULL,    NULL,           0,         1,           1,          1,          0,          -1,     'c' },
 };
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
@@ -112,11 +123,30 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+/*First arg only serves to match against key in rules*/
+static const char *scratchpadcmd[] = {"s", "st", "-c", "scratchpad", NULL}; 
+static const char *pulsemixercmd[] = {"p", "st", "-c", "pulsemixercmd", "-e", "pulsemixer", NULL}; 
+static const char *gotopcmd[] = {"g", "st", "-c", "gotopcmd", "-e", "gotop", NULL}; 
+static const char *bccmd[] = {"c", "st", "-c", "bccmd", "-e", "bc", "-lq", NULL};
+
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
+  { MODKEY,                       XK_w,      spawn,          SHCMD("$BROWSER") },
+	{ MODKEY,                       XK_a,      togglescratch,  {.v = pulsemixercmd } },
+	{ MODKEY,                       XK_s,      togglescratch,  {.v = gotopcmd } },
+	{ MODKEY,                       XK_c,      togglescratch,  {.v = bccmd } },
+	{ Mod1Mask|ControlMask,         XK_m,      spawn,          SHCMD("st -c ncmpcppterm -e ncmpcpp") },
+	{ Mod1Mask|ControlMask,	        XK_r,      spawn,          SHCMD("st -c newsboatterm -e newsboat") },
+	{ Mod1Mask|ControlMask,	        XK_u,      spawn,          SHCMD("dmenuunicode") },
+	{ Mod1Mask|ControlMask,	        XK_x,      spawn,          SHCMD("sstocb") },
+	{ Mod1Mask|ControlMask,	        XK_s,      spawn,          SHCMD("sstop") },
+	{ Mod1Mask|ShiftMask,	          XK_x,      spawn,          SHCMD("colorp") },
+	{ Mod1Mask|ControlMask,	        XK_c,      spawn,          SHCMD("toggleprogram picom") },
+	{ Mod1Mask|ControlMask,	        XK_l,      spawn,          SHCMD("lock") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
