@@ -4,10 +4,10 @@
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
-static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
+static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
+static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -21,7 +21,7 @@ static char normfgcolor[]           = "#808080";
 static char selfgcolor[]            = "#ffffff";
 static char selbordercolor[]        = "#005577";
 static char selbgcolor[]            = "#1D1F21";
-static char statusfgcolor[]         = "#dedede";
+/* static char statusfgcolor[]         = "#dedede"; */
 static const unsigned int baralpha = 200;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
@@ -148,9 +148,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_0,      scratchpad_show,{0} },
 	{ MODKEY|ShiftMask,             XK_0,      scratchpad_hide,{0} },
 	{ MODKEY,                       XK_Escape, scratchpad_remove,{0} },
-	{ MODKEY|ShiftMask,		          XK_s,	     spawn,	         SHCMD("transset-df -a --dec .1") },
-	{ MODKEY|ShiftMask,		          XK_d,	     spawn,	         SHCMD("transset-df -a --inc .1") },
-	{ MODKEY|ShiftMask,		          XK_f,	     spawn,	         SHCMD("transset-df -a .75") },
+	{ MODKEY|ShiftMask,		          XK_bracketleft,spawn,	     SHCMD("transset-df -a --dec .1") },
+	{ MODKEY|ShiftMask,		          XK_bracketright,spawn,	   SHCMD("transset-df -a --inc .1") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -163,33 +162,40 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
-	{ MODKEY,                       XK_s,      swapfocus,      {.i = -1 } },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY|Mod4Mask,              XK_u,      incrgaps,       {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,      incrgaps,       {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_i,      incrigaps,      {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_i,      incrigaps,      {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_o,      incrogaps,      {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_o,      incrogaps,      {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_6,      incrihgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_6,      incrihgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_7,      incrivgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_7,      incrivgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_8,      incrohgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_8,      incrohgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_9,      incrovgaps,     {.i = +1 } },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } },
-	{ MODKEY|Mod4Mask,              XK_0,      togglegaps,     {0} },
-	{ MODKEY|Mod4Mask|ShiftMask,    XK_0,      defaultgaps,    {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
+	{ MODKEY,                       XK_bracketright,incrgaps,  {.i = +1 } },
+	{ MODKEY,                       XK_bracketleft,incrgaps,   {.i = -1 } },
+	/* { MODKEY|Mod4Mask,              XK_i,      incrigaps,      {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_i,      incrigaps,      {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_o,      incrogaps,      {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_o,      incrogaps,      {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_6,      incrihgaps,     {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_6,      incrihgaps,     {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_7,      incrivgaps,     {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_7,      incrivgaps,     {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_8,      incrohgaps,     {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_8,      incrohgaps,     {.i = -1 } }, */
+	/* { MODKEY|Mod4Mask,              XK_9,      incrovgaps,     {.i = +1 } }, */
+	/* { MODKEY|Mod4Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } }, */
+	{ MODKEY,                       XK_0,      togglegaps,     {0} },
+	{ MODKEY|ShiftMask,             XK_0,      defaultgaps,    {0} },
+	{ MODKEY,                       XK_Tab,    swapfocus,      {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
+	{ MODKEY,                       XK_t,		setlayout,      {.v = &layouts[0]} },
+	{ MODKEY|ShiftMask,             XK_t,		setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_r,		setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,             		XK_g,		setlayout,      {.v = &layouts[3]} },
+	{ MODKEY|ShiftMask,           	XK_g,		setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                       XK_u,		setlayout,      {.v = &layouts[5]} },
+	{ MODKEY|ShiftMask,             XK_u,		setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                       XK_m,		setlayout,      {.v = &layouts[7]} },
+	{ MODKEY|ShiftMask,             XK_m,		setlayout,      {.v = &layouts[8]} },
+	{ MODKEY|ControlMask,           XK_space,	setlayout,      {.v = &layouts[9]} },
+	{ MODKEY,                       XK_space,	setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_y,      togglefullscreen, {0} },
-	{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ MODKEY,                       XK_f,      togglefullscreen, {0} },
+	{ MODKEY|ShiftMask,             XK_s,      togglesticky,   {0} },
 	{ Mod1Mask,                     XK_j,      moveresize,     {.v = "0x 25y 0w 0h" } },
 	{ Mod1Mask,                     XK_k,      moveresize,     {.v = "0x -25y 0w 0h" } },
 	{ Mod1Mask,                     XK_l,      moveresize,     {.v = "25x 0y 0w 0h" } },
