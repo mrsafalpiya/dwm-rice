@@ -3,3 +3,4 @@
 #include "bar_status.c"
 #include "bar_tags.c"
 #include "bar_wintitle.c"
+#include "bar_systray.c"

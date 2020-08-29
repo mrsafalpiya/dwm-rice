@@ -5,6 +5,8 @@ static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const unsigned int systrayspacing = 2;   /* systray spacing */
+static const int showsystray             = 1;   /* 0 means no systray */
 static const char *fonts[]          = { "JetBrains Mono:pixelsize=14", "JoyPixels:size=12", "Symbols Nerd Font:size=12" };
 static const char dmenufont[]       = "JetBrains Mono:size=11";
 static const char col_gray1[]       = "#222222";
@@ -47,6 +49,7 @@ static const BarRule barrules[] = {
 	/* monitor  bar    alignment         widthfunc              drawfunc              clickfunc           name */
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
 	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
 	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
 };
