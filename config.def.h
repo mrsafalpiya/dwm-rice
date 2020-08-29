@@ -22,7 +22,7 @@ static char selfgcolor[]            = "#ffffff";
 static char selbordercolor[]        = "#005577";
 static char selbgcolor[]            = "#1D1F21";
 static char statusfgcolor[]         = "#dedede";
-static const unsigned int baralpha = 255;
+static const unsigned int baralpha = 150;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
@@ -148,6 +148,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_0,      scratchpad_show,{0} },
 	{ MODKEY|ShiftMask,             XK_0,      scratchpad_hide,{0} },
 	{ MODKEY,                       XK_Escape, scratchpad_remove,{0} },
+	{ MODKEY|ShiftMask,		          XK_s,	     spawn,	         SHCMD("transset-df -a --dec .1") },
+	{ MODKEY|ShiftMask,		          XK_d,	     spawn,	         SHCMD("transset-df -a --inc .1") },
+	{ MODKEY|ShiftMask,		          XK_f,	     spawn,	         SHCMD("transset-df -a .75") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
