@@ -201,6 +201,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_r,      quit,           {1} }, 
 
 	/* External programs */
 	{ Mod1Mask|ControlMask,		XK_p,		spawn,          SHCMD("mpc toggle") },
