@@ -6,3 +6,5 @@ util.o
 /*.diff
 /*.orig
 /*.rej
+/patch/*.orig
+/patch/*.rej
