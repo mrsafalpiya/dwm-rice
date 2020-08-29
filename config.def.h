@@ -22,10 +22,10 @@ static char selfgcolor[]            = "#ffffff";
 static char selbordercolor[]        = "#005577";
 static char selbgcolor[]            = "#1D1F21";
 static char statusfgcolor[]         = "#dedede";
-static const unsigned int baralpha = 150;
+static const unsigned int baralpha = 200;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
+	/*               fg            bg           border   */
 	[SchemeNorm] 	= { normfgcolor, normbgcolor, normbordercolor },
 	[SchemeSel]  	= { selfgcolor,  selbgcolor,  selbordercolor  },
 };
@@ -190,6 +190,14 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_y,      togglefullscreen, {0} },
 	{ MODKEY,                       XK_s,      togglesticky,   {0} },
+	{ Mod1Mask,                     XK_j,      moveresize,     {.v = "0x 25y 0w 0h" } },
+	{ Mod1Mask,                     XK_k,      moveresize,     {.v = "0x -25y 0w 0h" } },
+	{ Mod1Mask,                     XK_l,      moveresize,     {.v = "25x 0y 0w 0h" } },
+	{ Mod1Mask,                     XK_h,      moveresize,     {.v = "-25x 0y 0w 0h" } },
+	{ Mod1Mask|ShiftMask,           XK_j,      moveresize,     {.v = "0x 0y 0w 25h" } },
+	{ Mod1Mask|ShiftMask,           XK_k,      moveresize,     {.v = "0x 0y 0w -25h" } },
+	{ Mod1Mask|ShiftMask,           XK_l,      moveresize,     {.v = "0x 0y 25w 0h" } },
+	{ Mod1Mask|ShiftMask,           XK_h,      moveresize,     {.v = "0x 0y -25w 0h" } },
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
