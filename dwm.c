@@ -285,6 +285,7 @@ static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
+static void swapfocus(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
@@ -370,6 +371,7 @@ static xcb_connection_t *xcon;
 
 struct Pertag {
 	unsigned int curtag, prevtag; /* current and previous tag */
+	Client *prevclient[LENGTH(tags) + 1];
 	int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
 	float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
@@ -887,6 +889,8 @@ createmon(void)
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
+	m->pertag = ecalloc(1, sizeof(Pertag));
+	m->pertag->curtag = m->pertag->prevtag = 1;
 	if (!(m->pertag = (Pertag *)calloc(1, sizeof(Pertag))))
 		die("fatal: could not malloc() %u bytes\n", sizeof(Pertag));
 	m->pertag->curtag = m->pertag->prevtag = 1;
@@ -1666,6 +1670,7 @@ killclient(const Arg *arg)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
+	selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
 }
 
 void
@@ -2409,11 +2414,40 @@ spawn(const Arg *arg)
 }
 
 void
+swapfocus(const Arg *arg)
+{
+	if (!selmon->sel)
+		return;
+	if(selmon->pertag->prevclient[selmon->pertag->curtag] != NULL 
+			&& ISVISIBLE(selmon->pertag->prevclient[selmon->pertag->curtag])){
+		focus(selmon->pertag->prevclient[selmon->pertag->curtag]);
+		restack(selmon->pertag->prevclient[selmon->pertag->curtag]->mon);
+	}
+	else{
+		Client *c = NULL;
+		for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next);
+		if (!c)
+			for (c = selmon->clients; c && !ISVISIBLE(c); c = c->next);
+		if (c) {
+			focus(c);
+			restack(selmon);
+		}
+	}
+}
+
+void
 tag(const Arg *arg)
 {
+	unsigned int tagmask, tagindex;
 	if (selmon->sel && arg->ui & TAGMASK) {
 		selmon->sel->tags = arg->ui & TAGMASK;
 		focus(NULL);
+		
+		selmon->pertag->prevclient[selmon->pertag->curtag] = NULL;
+		for(tagmask = arg->ui & TAGMASK, tagindex = 1; tagmask!=0; tagmask >>= 1, tagindex++)
+			if(tagmask & 1)
+				selmon->pertag->prevclient[tagindex] = NULL;
+		
 		arrange(selmon);
 	}
 }
@@ -2471,7 +2505,7 @@ togglesticky(const Arg *arg)
 void
 toggletag(const Arg *arg)
 {
-	unsigned int newtags;
+	unsigned int newtags, tagmask, tagindex;
 
 	if (!selmon->sel)
 		return;
@@ -2479,6 +2513,11 @@ toggletag(const Arg *arg)
 	if (newtags) {
 		selmon->sel->tags = newtags;
 		focus(NULL);
+		
+		for(tagmask = arg->ui & TAGMASK, tagindex = 1; tagmask!=0; tagmask >>= 1, tagindex++)
+			if(tagmask & 1)
+				selmon->pertag->prevclient[tagindex] = NULL;
+		
 		arrange(selmon);
 	}
 }
@@ -2520,6 +2559,7 @@ unfocus(Client *c, int setfocus)
 {
 	if (!c)
 		return;
+	selmon->pertag->prevclient[selmon->pertag->curtag] = c;
 	if (c->isfullscreen && ISVISIBLE(c) && c->mon == selmon)
 		setfullscreen(c, 0);
 	grabbuttons(c, 0);
@@ -2883,7 +2923,9 @@ view(const Arg *arg)
 	selmon->lt[selmon->sellt^1] = selmon->pertag->ltidxs[selmon->pertag->curtag][selmon->sellt^1];
 	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
 		togglebar(NULL);
+	Client *unmodified = selmon->pertag->prevclient[selmon->pertag->curtag];
 	focus(NULL);
+	selmon->pertag->prevclient[selmon->pertag->curtag] = unmodified;
 	arrange(selmon);
 }
 
@@ -3126,12 +3168,13 @@ void
 zoom(const Arg *arg)
 {
 	Client *c = selmon->sel;
+	selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(selmon->clients);
 
 	if (!selmon->lt[selmon->sellt]->arrange
 	|| (selmon->sel && selmon->sel->isfloating))
 		return;
 	if (c == nexttiled(selmon->clients))
-		if (!c || !(c = nexttiled(c->next)))
+		if (!c || !(c = selmon->pertag->prevclient[selmon->pertag->curtag] = nexttiled(c->next)))
 			return;
 	pop(c);
 }
