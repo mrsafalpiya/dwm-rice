@@ -15,17 +15,19 @@ static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 static const char *fonts[]          = { "JetBrains Mono:pixelsize=14", "JoyPixels:size=12", "Symbols Nerd Font:size=12" };
 static const char dmenufont[]       = "JetBrains Mono:size=11";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+static char normbgcolor[]           = "#1D1F21";
+static char normbordercolor[]       = "#000000";
+static char normfgcolor[]           = "#808080";
+static char selfgcolor[]            = "#ffffff";
+static char selbordercolor[]        = "#005577";
+static char selbgcolor[]            = "#1D1F21";
+static char statusfgcolor[]         = "#dedede";
 static const unsigned int baralpha = 255;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] 	= { normfgcolor, normbgcolor, normbordercolor },
+	[SchemeSel]  	= { selfgcolor,  selbgcolor,  selbordercolor  },
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
@@ -34,7 +36,7 @@ static const unsigned int alphas[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { " term", " web", " dev", " work", "", "", " img", " rss", " music"};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -74,14 +76,14 @@ static const Rule rules[] = {
 static const BarRule barrules[] = {
 	/* monitor  bar    alignment         widthfunc              drawfunc              clickfunc           name */
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
-	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
-	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
-	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
+	{ -1,       1,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
+	{ 'A',      1,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
+	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
+	{ -1,       1,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
@@ -89,22 +91,17 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 #include "vanitygaps.c"
 
 static const Layout layouts[] = {
-	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "[M]",      monocle },
-	{ "[@]",      spiral },
-	{ "[\\]",     dwindle },
-	{ "H[]",      deck },
-	{ "TTT",      bstack },
-	{ "===",      bstackhoriz },
-	{ "HHH",      grid },
-	{ "###",      nrowgrid },
-	{ "---",      horizgrid },
-	{ ":::",      gaplessgrid },
-	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ NULL,       NULL },
+		/* symbol     arrange function */
+	{ " ",      tile },    /* first entry is default */
+	{ " ",      bstack },
+	{ " ",      dwindle },
+	{ "ﱖ ",      gaplessgrid },
+	{ "ﰀ ",      horizgrid },
+	{ " ",      centeredmaster },
+	{ " ",      centeredfloatingmaster },
+	{ " ",      monocle },
+	{ " ",      deck },
+	{ "缾",      NULL },    /* no layout function means floating behavior */
 };
 
 /* key definitions */
@@ -120,7 +117,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 /*First arg only serves to match against key in rules*/
