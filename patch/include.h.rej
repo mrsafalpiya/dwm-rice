@@ -1,0 +1,8 @@
+--- patch/include.h
++++ patch/include.h
+@@ -2,4 +2,5 @@
+ #include "bar_ltsymbol.h"
+ #include "bar_status.h"
+ #include "bar_tags.h"
+-#include "bar_wintitle.h"+#include "bar_wintitle.h"
++#include "bar_taggrid.h"
