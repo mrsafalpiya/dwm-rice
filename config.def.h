@@ -3,6 +3,7 @@
 /* appearance */
 static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
@@ -40,9 +41,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           -1 },
+	/* class      instance    title       tags mask     iscentered   isfloating   isterminal  noswallow  monitor */
+	{ "Gimp",     NULL,       NULL,       0,            0,           1,           0,           0,        -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           0,           0,          -1,        -1 },
+	{ "st",       NULL,       NULL,       0,            0,           0,           1,           0,        -1 },
+	{ NULL,       NULL,       "Event Tester",0,         0,           0,           0,           1,        -1 }, /* xev */
 };
 
 /* Bar rules allow you to configure what is shown where on the bar, as well as
