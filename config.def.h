@@ -92,12 +92,12 @@ static const Rule rules[] = {
  */
 static const BarRule barrules[] = {
 	/* monitor  bar    alignment         widthfunc              drawfunc              clickfunc           name */
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_taggrid,         draw_taggrid,         click_taggrid,      "taggrid" },
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_tags,            draw_tags,            click_tags,         "tags" },
-	{ -1,       1,     BAR_ALIGN_LEFT,   width_taggrid,         draw_taggrid,         click_taggrid,      "taggrid" },
-	{ -1,       1,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
-	{ 'A',      1,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
+	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,        draw_ltsymbol,        click_ltsymbol,     "layout" },
+	{ 'A',      0,     BAR_ALIGN_RIGHT,  width_systray,         draw_systray,         click_systray,      "systray" },
 	{ -1,       0,     BAR_ALIGN_RIGHT,  width_status,          draw_status,          click_status,       "status" },
-	{ -1,       1,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
+	{ -1,       0,     BAR_ALIGN_NONE,   width_wintitle,        draw_wintitle,        click_wintitle,     "wintitle" },
 };
 
 /* layout(s) */
@@ -163,9 +163,9 @@ static Key keys[] = {
 	{ Mod1Mask|ShiftMask,	          XK_x,      spawn,          SHCMD("colorp") },
 	{ Mod1Mask|ControlMask,	        XK_c,      spawn,          SHCMD("toggleprogram picom") },
 	{ Mod1Mask|ShiftMask,	          XK_l,      spawn,          SHCMD("lock") },
-	{ MODKEY,                       XK_0,      scratchpad_show,{0} },
-	{ MODKEY|ShiftMask,             XK_0,      scratchpad_hide,{0} },
-	{ MODKEY,                       XK_Escape, scratchpad_remove,{0} },
+	{ MODKEY,                       XK_backslash,              scratchpad_show,{0} },
+	{ MODKEY|ShiftMask,             XK_backslash,              scratchpad_hide,{0} },
+	{ MODKEY,                       XK_Escape,                 scratchpad_remove,{0} },
 	{ MODKEY|ShiftMask,		          XK_bracketleft,spawn,	     SHCMD("transset-df -a --dec .1") },
 	{ MODKEY|ShiftMask,		          XK_bracketright,spawn,	   SHCMD("transset-df -a --inc .1") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -195,8 +195,8 @@ static Key keys[] = {
 	/* { MODKEY|Mod4Mask|ShiftMask,    XK_8,      incrohgaps,     {.i = -1 } }, */
 	/* { MODKEY|Mod4Mask,              XK_9,      incrovgaps,     {.i = +1 } }, */
 	/* { MODKEY|Mod4Mask|ShiftMask,    XK_9,      incrovgaps,     {.i = -1 } }, */
-	{ MODKEY,                       XK_backslash,togglegaps,   {0} },
-	{ MODKEY|ShiftMask,             XK_backslash,defaultgaps,  {0} },
+	{ MODKEY,                       XK_slash,   togglegaps,   {0} },
+	{ MODKEY|ShiftMask,             XK_slash,   defaultgaps,  {0} },
 	{ MODKEY,                       XK_Tab,    swapfocus,      {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
